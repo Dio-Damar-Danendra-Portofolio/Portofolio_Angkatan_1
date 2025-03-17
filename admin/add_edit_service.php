@@ -9,9 +9,9 @@
     $queryService = mysqli_query($conn, "SELECT * FROM service LIMIT 1");
     $row_edit = mysqli_fetch_assoc($queryService);
     
-    if (isset($_POST["simpan"])) {
-        $nama_service = $_POST["nama_service"];
-        $foto = $_FILES["foto"];
+    if (isset($_POST['simpan'])) {
+        $nama_service = $_POST['nama_service'];
+        $foto = $_FILES['foto'];
 
         if ($foto['error'] == 0) {
           $fileName = uniqid() . "_" . basename($foto['name']);
@@ -88,17 +88,17 @@
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Service</h5>
+              <h5 class="card-title">Layanan</h5>
               <form action="" method="post" enctype="multipart/form-data">
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
-                        <label class="form-label" for="nama_service">Nama Service: </label>
+                        <label class="form-label" for="nama_service">Nama Layanan: </label>
                     </div>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="nama_service" id="nama_service" placeholder="Masukkan nama service Anda!" required value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $row_edit['nama_service']  : ''?>">
+                        <input type="text" class="form-control" name="nama_service" id="nama_service" placeholder="Masukkan nama layanan Anda!" required value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $row_edit['nama_service']  : ''?>">
                     </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
                         <label class="form-label" for="foto">Foto: </label>
                     </div>
@@ -111,7 +111,7 @@
                     </div>
                       <?php } ?>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                 <div class="col-md-2">
                   <?php if (isset($_GET['idEdit'])) { ?>
                     <button type="submit" class="btn btn-md btn-primary" name="sunting">Sunting!</button>

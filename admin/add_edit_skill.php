@@ -7,7 +7,7 @@
     }
 
     $querySkill = mysqli_query($conn, "SELECT * FROM skill LIMIT 1");
-    $row_edit = mysqli_fetch_assoc($querySkill);
+    $rowEdit = mysqli_fetch_assoc($querySkill);
     
     if (isset($_POST["simpan"])) {
         $nama_skill = $_POST["nama_skill"];
@@ -62,25 +62,25 @@
         <div class="col-lg-12">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Skill</h5>
+              <h5 class="card-title">Keterampilan</h5>
               <form action="" method="post" enctype="multipart/form-data">
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
-                        <label class="form-label" for="nama_skill">Nama Skill: </label>
+                        <label class="form-label" for="nama_skill">Keterampilan: </label>
                     </div>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control"  name="nama_skill" id="nama_skill" placeholder="Masukkan skill Anda!" required value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $row_edit['nama_skill']  : ''?>">
+                        <input type="text" class="form-control"  name="nama_skill" id="nama_skill" placeholder="Masukkan keterampilan Anda!" required value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $rowEdit['nama_skill']  : ''?>">
                     </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
                         <label class="form-label" for="persentase">Persentase: </label>
                     </div>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" min="0" max="100" name="persentase" id="persentase" value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $row_edit['persentase']  : ''?>">
+                        <input type="number" class="form-control" min="0" max="100" name="persentase" id="persentase" value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $rowEdit['persentase']  : ''?>">
                     </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                 <div class="col-md-2">
                   <?php if (isset($_GET['idEdit'])) { ?>
                     <button type="submit" class="btn btn-md btn-primary" name="sunting">Sunting!</button>

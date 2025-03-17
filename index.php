@@ -38,8 +38,11 @@
 	$selectAbout = mysqli_query($conn, "SELECT * FROM setting WHERE id = 1");
 	$rowAbout = mysqli_fetch_assoc($selectAbout);
 
-	$kueri_proyek = mysqli_query($conn, "SELECT * FROM project");
-	$rowProyek = mysqli_fetch_all($kueri_proyek, MYSQLI_ASSOC);
+	$kueriProyek = mysqli_query($conn, "SELECT * FROM project ORDER BY id DESC");
+	$rowProyek = mysqli_fetch_all($kueriProyek, MYSQLI_ASSOC);
+
+	$kueriBlog = mysqli_query($conn, "SELECT * FROM blog WHERE status = 1 ORDER BY id DESC LIMIT 3");
+	$rowBlog = mysqli_fetch_all($kueriBlog, MYSQLI_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -144,12 +147,12 @@
     			<div class="col-md-6 col-lg-7 pl-lg-5 pb-5">
     				<div class="row justify-content-start pb-3">
 		          <div class="col-md-12 heading-section ftco-animate">
-		          	<h1 class="big">About</h1>
-		            <h2 class="mb-4">About Me</h2>
-		            <p>A headphones store in Depok.</p>
+		          	<h1 class="big">Tentang</h1>
+		            <h2 class="mb-4">Tentang Saya</h2>
+		            <p>Ini merupakan deskripsi saya.</p>
 		            <ul class="about-info mt-4 px-md-0 px-2">
-		            	<li class="d-flex"><span>Name:</span> <span><?php echo $rowAbout['nama_website']; ?></span></li>
-		            	<li class="d-flex"><span>E-mail:</span> <span><?php echo $rowAbout['email'];?></span></li>
+		            	<li class="d-flex"><span>Nama Website:</span> <span><?php echo $rowAbout['nama_website']; ?></span></li>
+		            	<li class="d-flex"><span>E-mail (Surel):</span> <span><?php echo $rowAbout['email'];?></span></li>
 		            	<li class="d-flex"><span>Alamat:</span> <span><?php echo $rowAbout['alamat_kantor'];?></span></li>
 		            	<li class="d-flex"><span>Nomor Telepon:</span> <span><?php echo $rowAbout['telepon'];?></span></li>
 		            </ul>
@@ -159,9 +162,9 @@
               <div class="text">
               	<p class="mb-4">
 	                <span class="number" data-number="120">0</span>
-	                <span>Project complete</span>
+	                <span>Proyek Selesai!</span>
                 </p>
-                <p><a href="#" class="btn btn-primary py-3 px-3">Download CV</a></p>
+                <p><a href="#" class="btn btn-primary py-3 px-3">Unduh CV</a></p>
               </div>
 	          </div>
 	        </div>
@@ -175,7 +178,7 @@
           <div class="col-md-10 heading-section text-center ftco-animate">
           	<h1 class="big big-2">Resume</h1>
             <h2 class="mb-4">Resume</h2>
-            <p>This is a Resume</p>
+            <p>Ini adalah Resume</p>
           </div>
         </div>
     		<div class="row">
@@ -193,7 +196,7 @@
     		</div>
     		<div class="row justify-content-center mt-5">
     			<div class="col-md-6 text-center ftco-animate">
-    				<p><a href="#" class="btn btn-primary py-4 px-5">Download CV</a></p>
+    				<p><a href="#" class="btn btn-primary py-4 px-5">Unduh CV</a></p>
     			</div>
     		</div>
     	</div>
@@ -203,9 +206,9 @@
     	<div class="container">
     		<div class="row justify-content-center py-5 mt-5">
           <div class="col-md-12 heading-section text-center ftco-animate">
-          	<h1 class="big big-2">Services</h1>
-            <h2 class="mb-4">Services</h2>
-            <p>Layanan Kami</p>
+          	<h1 class="big big-2">Layanan</h1>
+            <h2 class="mb-4">Layanan</h2>
+            <p>Ini merupakan Layanan Kami</p>
           </div>
         </div>
     		<div class="row">
@@ -230,9 +233,9 @@
 			<div class="container">
 				<div class="row justify-content-center pb-5">
           			<div class="col-md-12 heading-section text-center ftco-animate">
-          				<h1 class="big big-2">Skills</h1>
-						<h2 class="mb-4">My Skills</h2>
-						<p>Ini merupakan Skill saya</p>
+          				<h1 class="big big-2">Keterampilan</h1>
+						<h2 class="mb-4">Keterampilan Saya</h2>
+						<p>Ini merupakan Keterampilan saya</p>
 					</div>
 				</div>
 				<div class="row">
@@ -259,121 +262,74 @@
     	<div class="container">
     		<div class="row justify-content-center pb-5">
           <div class="col-md-12 heading-section text-center ftco-animate">
-          	<h1 class="big big-2">Projects</h1>
-            <h2 class="mb-4">Our Projects</h2>
-            <p>Ini merupakan proyek kami</p>
+          	<h1 class="big big-2">Proyek</h1>
+            <h2 class="mb-4">Proyek Kami</h2>
+            <p>Ini merupakan proyek kami selama kami menjadi Programmer</p>
           </div>
         </div>
     		<div class="row">
-				<?php foreach ($row_project as $project) {?>
-					<div class="col-md-8">
-    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(images/<?= $project['foto']?>);">
-    					<div class="overlay"></div>
-	    				<div class="text text-center p-4">
-							<h3><a href="#"><?php echo $project['nama'] ?></a></h3>
-							<span><?php echo $project['kategori'] ?></span>
-	    				</div>
-    				</div>
-
-    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(images/<?= $project['foto']?>);">
-    					<div class="overlay"></div>
-	    				<div class="text text-center p-4">
-	    					<h3><a href="#"><?php echo $project['nama'] ?></a></h3>
-	    					<span><?php echo $project['kategori'] ?></span>
-	    				</div>
-    				</div>
-    				</div>
-					<?php } ?>
-    			
-
-    			<div class="col-md-4">
-    				<div class="row">
-    					<div class="col-md-12">
-		    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(images/project-2.jpg);">
-		    					<div class="overlay"></div>
-			    				<div class="text text-center p-4">
-			    					<h3><a href="#">Branding &amp; Illustration Design</a></h3>
-			    					<span>Web Design</span>
-			    				</div>
-		    				</div>
-	    				</div>
-	    				<div class="col-md-12">
-		    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(images/project-3.jpg);">
-		    					<div class="overlay"></div>
-			    				<div class="text text-center p-4">
-			    					<h3><a href="#">Branding &amp; Illustration Design</a></h3>
-			    					<span>Web Design</span>
-			    				</div>
-		    				</div>
-	    				</div>
-    				</div>
-    			</div>
+				<?php 
+					$colClass = ["col-md-4", "col-md-8"];
+					$index = 0;
+						foreach ($rowProyek as $index => $project) { 
+							$col = $colClass[$index % 2]; ?>
+							<div class="<?php echo $col ?> mb-3">
+    								<di class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(<?php echo "../assets/uploads/" . $project['foto'] ?>);">
+    							<div class="overlay"></div>
+	    						<div class="text text-center p-4">
+									<h3><a href="#"><?php echo $project['nama'] ?></a></h3>
+									<span><?php echo $project['kategori'] ?></span>
+	    						</div>
+								</div>
+								<div class="<?php echo $col ?> mb-3">
+    								<di class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(<?php echo "../assets/uploads/" . $project['foto'] ?>);">
+    							<div class="overlay"></div>
+	    						<div class="text text-center p-4">
+									<h3><a href="#"><?php echo $project['nama'] ?></a></h3>
+									<span><?php echo $project['kategori'] ?></span>
+	    						</div>
+								</div>
+							</div>
+							<?php } ?> 
     		</div>
     	</div>
     </section>
-
 
     <section class="ftco-section" id="blog-section">
       <div class="container">
         <div class="row justify-content-center mb-5 pb-5">
           <div class="col-md-7 heading-section text-center ftco-animate">
             <h1 class="big big-2">Blog</h1>
-            <h2 class="mb-4">Our Blog</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+            <h2 class="mb-4">Blog Kami</h2>
+            <p>Silahkan membaca Blog Saya, Jangan lupa komentarnya.</p>
           </div>
         </div>
         <div class="row d-flex">
-          <div class="col-md-4 d-flex ftco-animate">
+			<?php 
+				foreach ($rowBlog as $blog) {?>
+					<div class="col-md-4 d-flex ftco-animate">
           	<div class="blog-entry justify-content-end">
-              <a href="single.html" class="block-20" style="background-image: url('images/image_1.jpg');">
+              <a href="single.html" class="block-20" style="background-image: url('../assets/uploads/<?php echo $blog['foto']?>');">
               </a>
               <div class="text mt-3 float-right d-block">
               	<div class="d-flex align-items-center mb-3 meta">
 	                <p class="mb-0">
-	                	<span class="mr-2">June 21, 2019</span>
-	                	<a href="#" class="mr-2">Admin</a>
+	                	<span class="mr-2"><?php echo
+						$tanggal = date("M d", strtotime($blog['created_at']));
+						$tahun = date("Y", strtotime($blog['created_at'])); 
+						$jam = date("H:i:s", strtotime($blog['created_at'])); 
+						echo $tanggal . " , " . $tahun?></span>
+	                	<a href="#" class="mr-2"><?php echo $blog['penulis']?></a>
 	                	<a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a>
 	                </p>
                 </div>
-                <h3 class="heading"><a href="single.html">Why Lead Generation is Key for Business Growth</a></h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                <h3 class="heading"><a href="single.html"><?php echo $blog['judul']?></a></h3>
+                <p><?php echo substr($blog['isi'], 0, 100) ?></p>
               </div>
             </div>
           </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry justify-content-end">
-              <a href="single.html" class="block-20" style="background-image: url('images/image_2.jpg');">
-              </a>
-              <div class="text mt-3 float-right d-block">
-              	<div class="d-flex align-items-center mb-3 meta">
-	                <p class="mb-0">
-	                	<span class="mr-2">June 21, 2019</span>
-	                	<a href="#" class="mr-2">Admin</a>
-	                	<a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a>
-	                </p>
-                </div>
-                <h3 class="heading"><a href="single.html">Why Lead Generation is Key for Business Growth</a></h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry">
-              <a href="single.html" class="block-20" style="background-image: url('images/image_3.jpg');">
-              </a>
-              <div class="text mt-3 float-right d-block">
-              	<div class="d-flex align-items-center mb-3 meta">
-	                <p class="mb-0">
-	                	<span class="mr-2">June 21, 2019</span>
-	                	<a href="#" class="mr-2">Admin</a>
-	                	<a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a>
-	                </p>
-                </div>
-                <h3 class="heading"><a href="single.html">Why Lead Generation is Key for Business Growth</a></h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-              </div>
-            </div>
-          </div>
+			<?php } ?>
+          
         </div>
       </div>
     </section>

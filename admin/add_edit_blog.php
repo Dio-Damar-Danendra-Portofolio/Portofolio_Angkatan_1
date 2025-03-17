@@ -6,31 +6,38 @@
       header("Location:../login.php");
     }
 
-    $query_project = mysqli_query($conn, "SELECT * FROM project LIMIT 1");
-    $row_edit = mysqli_fetch_assoc($query_project);
+    $query_blog = mysqli_query($conn, "SELECT * FROM blog LIMIT 1");
+    $row_edit = mysqli_fetch_assoc($query_blog);
+
+    $queryCategory = mysqli_query($conn, "SELECT * FROM categories ORDER BY id DESC");
+    $rowCategory = mysqli_fetch_all($queryCategory, MYSQLI_ASSOC);
     
     if (isset($_POST['simpan'])) {
-        $nama_project = $_POST['nama'];
-        $kategori = $_POST['kategori'];
+        $judul = $_POST['judul'];
+        $id_kategori = $_POST['id_kategori'];
+        $status = $_POST['status'];
+        $isi = $_POST['isi'];
         $foto = $_FILES['foto'];
+        $tags = $_POST['tags'];
+        $penulis = $_SESSION['Full_Name'];
 
         if ($foto['error'] == 0) {
           $namaFile = uniqid() . "_" .basename($foto['name']);
           $lokasiFile = "../assets/uploads/".$namaFile;
           move_uploaded_file($foto['tmp_name'], $lokasiFile);
 
-          $insert = mysqli_query($conn, "INSERT INTO project (nama, kategori, foto) VALUES ('$nama_project', '$kategori', '$namaFile')");
+          $insert = mysqli_query($conn, "INSERT INTO blog (judul, isi, id_kategori, tags, status, foto) 
+          VALUES ('$judul', '$isi', '$id_kategori', '$tags', '$status', '$namaFile')");
 
           if ($insert) {
-            header("Location: projects.php"); 
+            header("Location: blog.php");
           }
         }
-
     }
 
     if (isset($_GET['idEdit'])) {
       $idEdit = $_GET['idEdit'];
-      $queryEdit = mysqli_query($conn, "SELECT * FROM project WHERE id = $idEdit");
+      $queryEdit = mysqli_query($conn, "SELECT * FROM blog WHERE id = $idEdit");
       $rowEdit = mysqli_fetch_assoc($queryEdit);
       // echo $rowEdit['foto'];
     }
@@ -38,8 +45,11 @@
     if (isset($_POST['sunting'])) {
       if (isset($_GET['idEdit'])) {
         $id = $_GET['idEdit'];
-        $nama_project = $_POST['nama'];
+        $judul_blog = $_POST['judul'];
         $kategori = $_POST['kategori'];
+        $isi = $_POST['isi'];
+        $status = $_POST['status'];
+
         $foto = $_FILES['foto'];
         // var_dump($foto);
   
@@ -48,18 +58,21 @@
           $lokasiFile = "../assets/uploads/" . $namaFile;
           // move_uploaded_file($logo['tmp_name'], $filePath);
           if (move_uploaded_file($foto['tmp_name'], $lokasiFile)){
-            $qCheck = mysqli_query($conn, "SELECT foto FROM project WHERE id = $idEdit;");
+            $qCheck = mysqli_query($conn, "SELECT foto FROM blog WHERE id = $idEdit;");
             $rowFoto = mysqli_fetch_assoc($qCheck);
             if ($rowFoto && file_exists("../assets/uploads/" . $rowFoto['foto'])) {
                 unlink("../assets/uploads/" . $rowFoto['foto']);
             }
             $fillQUpdate = "foto='$namaFile', ";
+            $queryUpdate = mysqli_query($conn, "UPDATE blog SET $fillQUpdate judul='$judul_blog', kategori='$kategori', isi='$isi', 
+        isi='$isi', isi='$isi', $fillQUpdate 
+        WHERE id = $idEdit;");
           } else {
               echo "Gagal upload... Coba lagi...";
           }
         }
-        $queryUpdate = mysqli_query($conn, "UPDATE project SET $fillQUpdate nama='$nama_project', kategori='$kategori' WHERE id = $idEdit;");
-        header("Location: projects.php?ubah=berhasil");
+        
+        header("Location: blog.php?ubah=berhasil");
       }
     }
 
@@ -73,7 +86,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php include "../inc/head.php"; ?>
-
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
 <body>
 
   <!-- ======= Header ======= -->
@@ -95,10 +110,18 @@
               <form action="" method="post" enctype="multipart/form-data">
                 <div class="row mb-3">
                     <div class="col-sm-2">
-                        <label class="form-label" for="nama">Nama Proyek: </label>
+                        <label class="form-label" for="judul">Judul Berita: </label>
                     </div>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan nama proyek Anda!" required value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $rowEdit['nama'] : '' ?>">
+                        <input type="text" class="form-control" name="judul" id="judul" placeholder="Masukkan judul blog Anda!" required value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $rowEdit['judul'] : '' ?>">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-2">
+                        <label class="form-label" for="isi" >Isi Berita: </label>
+                    </div>
+                    <div class="col-sm-10">
+                        <textarea class="form-control summernote" name="isi" id="isi" required></textarea>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -106,7 +129,12 @@
                         <label class="form-label" for="kategori" >Kategori: </label>
                     </div>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="kategori" id="kategori" placeholder="Masukkan kategori proyek Anda!" value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $rowEdit['kategori'] : '' ?>">
+                        <select class="form-control" name="kategori" id="kategori" value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $rowEdit['kategori'] : '' ?>">
+                          <option value="Pilih Kategori">Pilih Kategori</option>
+                          <?php foreach ($rowCategory as $category) {?>
+                            <option value="<?php echo $category['id'] ?>"><?php echo $category['nama_kategori'] ?></option>
+                          <?php } ?>
+                        </select>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -122,6 +150,24 @@
                     </div>
                       <?php } ?>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-sm-2">
+                        <label class="form-label" for="tags" >Tags: </label>
+                    </div>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" name="tags" id="tags"  value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $rowEdit['tags'] : '' ?>"></textarea>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-2">
+                        <label class="form-label" for="status" >Status: </label>
+                    </div>
+                    <div class="col-sm-10">
+                        <select type="text" class="form-control" name="status" id="status" value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $rowEdit['status'] : '' ?>">
+                          <option value="1">Publish</option>
+                          <option value="0">Draft</option>
+                        </select>
+                    </div>
                 <div class="row mb-3">
                 <div class="col-md-2">
                   <?php if (isset($_GET['idEdit'])) { ?>
@@ -148,7 +194,7 @@
   <?php include "../inc/footer.php"; ?>
   <!-- End Footer -->
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
@@ -162,7 +208,12 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
+  <script>
+    $(".summernote").summernote({
+      height: 300,
+    });
+  </script>
 </body>
 
 </html>

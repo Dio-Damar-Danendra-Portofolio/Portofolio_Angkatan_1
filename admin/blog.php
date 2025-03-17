@@ -4,19 +4,19 @@ use Mpdf\Tag\Header;
     session_start();
     require_once "../koneksi.php";
 
-    $query = mysqli_query($conn, "SELECT * FROM project");
+    $query = mysqli_query($conn, "SELECT blog.*, categories.nama_kategori FROM blog LEFT JOIN categories ON blog.id_kategori = categories.id");
     $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
 
     if (isset($_GET['idDelete'])) {
       $id = $_GET['idDelete'];
 
-      $queryProject = mysqli_query($conn, "SELECT * FROM project");
-      $rowProject = mysqli_fetch_assoc($queryProject);
-      unlink('../assets/uploads/'. $rowProject['foto']);
+      $queryBlog = mysqli_query($conn, "SELECT * FROM blog");
+      $rowBlog = mysqli_fetch_assoc($queryblog);
+      unlink('../assets/uploads/'. $rowblog['foto']);
 
-      $delete = mysqli_query($conn, "DELETE FROM project WHERE id = $id");
+      $delete = mysqli_query($conn, "DELETE FROM blog WHERE id = $id");
       if ($delete) {
-        header("Location: projects.php?hapus=berhasil");
+        header("Location: blog.php?hapus=berhasil");
       }
     }
 ?>
@@ -41,40 +41,56 @@ use Mpdf\Tag\Header;
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Proyek</h5>
+              <h5 class="card-title">Blog</h5>
               <?php 
               if (isset($_GET['kirim']) && $_GET['kirim'] == "sukses") {?>
                 <div class="alert alert-success">
-                  Anda berhasil menambah/menyunting proyek!
+                  Anda berhasil menyunting/menambah blog!
                 </div>
-              <?php }
-              ?>
+              <?php }?>
               <div class="table table-responsive">
-                <a href="add_edit_project.php" class="btn btn-primary mb-2">Tambah Proyek</a>
-                <table class="table table-striped table-bordered text-center" id="myTable">
+                <a href="add_edit_blog.php" class="btn btn-primary mb-2">Buat Blog!</a>
+                  <table class="table table-striped table-bordered text-center" id="myTable">
                     <thead>
                     <tr>
                       <th>No. </th>
-                      <th>Nama Proyek</th>
-                      <th>Kategori</th>
                       <th>Foto</th>
+                      <th>Judul Blog</th>
+                      <th>Isi</th>
+                      <th>Penulis</th>
+                      <th>Status</th>
+                      <th>Kategori</th>
                       <th>Tindakan</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php 
                       $no = 1;
-                      foreach ($row as $project) { ?>
+                      foreach ($row as $blog) { ?>
                       <tr>
                         <td><?php echo $no++ ?></td>
-                        <td><?php echo $project['nama'] ?></td>
-                        <td><?php echo $project['kategori'] ?></td>
                         <td>
-                            <img width="100" src="../assets/uploads/<?php echo $project['foto'] ?>" style="min-height: 45%; max-height: 50%;" alt="Gambar tidak tersedia">
+                          <img src="<?php echo '../assets/uploads/' . $blog['foto'] ?>" width="100" style="min-height: 45%; max-height: 50%;" alt="">
                         </td>
+                        <td><?php echo $blog['judul'] ?></td>
+                        <td><?php echo $blog['isi'] ?></td>
+                        <td><?php echo $blog['penulis'] ?></td>
                         <td>
-                          <a href="add_edit_project.php?idEdit=<?php echo $project['id'] ?>" class="btn btn-success btn-sm">Sunting</a>
-                          <a href="projects.php?idDelete=<?php echo $project['id'] ?>" class="btn btn-danger btn-sm" onclick="return window.confirm('Apakah Anda yakin untuk menghapus data ini?')">Hapus</a>
+                          <?php
+                          switch ($blog['status']) {
+                            case '1':
+                              $label = "<span class='badge bg-primary'>Publish</span>";
+                              break;
+                            
+                            default:
+                              $label = "<span class='badge bg-warning'>Draft</span>";
+                              break;
+                          }?>
+                        </td>
+                        <td><?php echo $blog['nama_kategori'] ?></td>
+                        <td>
+                            <a href="add_edit_blog.php?idEdit=<?php echo $blog['id'] ?>" class="btn btn-success btn-sm">Sunting</a>
+                            <a href="blogs.php?idDelete=<?php echo $blog['id'] ?>" class="btn btn-danger btn-sm" onclick="return window.confirm('Apakah Anda yakin untuk menghapus data ini?')">Hapus</a>
                         </td>
                       </tr> 
                     <?php } ?>
@@ -96,11 +112,11 @@ use Mpdf\Tag\Header;
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <script
-        src="https://code.jquery.com/jquery-3.7.1.js"
-        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-        crossorigin="anonymous"></script>
   <!-- Vendor JS Files -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="crossorigin="anonymous">
+
+  </script>
+
   <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
   <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../assets/vendor/chart.js/chart.umd.js"></script>
@@ -116,7 +132,6 @@ use Mpdf\Tag\Header;
     <script>
         let dataTable = new DataTable("#myTable");
     </script>
-
 </body>
 
 </html>

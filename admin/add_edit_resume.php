@@ -78,7 +78,7 @@
             <div class="card-body">
               <h5 class="card-title">Resume</h5>
               <form action="" method="post" enctype="multipart/form-data">
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
                         <label class="form-label" for="instansi">Instansi: </label>
                     </div>
@@ -86,7 +86,7 @@
                         <input type="text" class="form-control"  name="instansi" id="instansi" required value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $row_edit['instansi']  : '' ?>">
                     </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
                         <label class="form-label" for="jabatan">Jabatan: </label>
                     </div>
@@ -94,7 +94,7 @@
                         <input type="text" class="form-control"  cols="30" rows="100" name="jabatan" id="jabatan" required value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $row_edit['jabatan']  : '' ?>">
                     </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
                         <label class="form-label" for="tahun_awal">Tahun Awal: </label>
                     </div>
@@ -102,7 +102,7 @@
                         <input type="number" class="form-control"  min="1800" max="9999" name="tahun_awal" id="tahun_awal" required value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) && isset($_GET['sidebar']) == "setting"  ? $row_edit['tahun_awal']  : '' ?>">
                     </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
                         <label class="form-label" for="tahun_akhir">Tahun Akhir: </label>
                     </div>
@@ -110,7 +110,7 @@
                         <input type="number" class="form-control" min="1800" max="9999" name="tahun_akhir" id="tahun_akhir" required value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) && isset($_GET['sidebar']) == "setting"  ? $row_edit['tahun_akhir']  : '' ?>">
                     </div>
                 </div>
-                <div class="row-mb-3 mb-2">
+                <div class="row mb-3 mb-2">
                     <div class="col-sm-2">
                         <label class="form-label" for="deskripsi">Deskripsi: </label>
                     </div>
@@ -118,7 +118,7 @@
                         <textarea class="form-control" cols="30" rows="10" name="deskripsi" id="deskripsi" required value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) && isset($_GET['sidebar']) == "setting"  ? $row_edit['deskripsi']  : '' ?>"></textarea>
                     </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                 <div class="col-mb-2">
                   <?php if (isset($_GET['idEdit'])) { ?>
                     <button type="submit" class="btn btn-md btn-primary" name="sunting">Sunting!</button>

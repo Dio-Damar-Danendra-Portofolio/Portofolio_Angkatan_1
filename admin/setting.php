@@ -67,7 +67,7 @@
         $delete = mysqli_query($conn, "DELETE FROM setting WHERE id = $id");
         $alterAI = mysqli_query($conn, "ALTER TABLE setting AUTO_INCREMENT = 1");
         if ($delete && $alterAI) {
-            header("Location: setting.php");
+            header("Location: setting.php?hapus=berhasil");
         }
       }
     }
@@ -95,7 +95,7 @@
             <div class="card-body">
               <h5 class="card-title">Pengaturan Umum</h5>
               <form action="" method="post" enctype="multipart/form-data">
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
                         <label for="nama_website">Nama Website: </label>
                     </div>
@@ -103,7 +103,7 @@
                         <input class="form-control" type="text" name="nama_website" id="nama_website" placeholder="Masukkan nama website Anda!" required value="<?php echo isset($_GET['tambah']) && $_GET['tambah'] == "berhasil" || isset($_GET['sidebar']) && isset($_GET['sidebar']) == "setting" ? $row_edit['nama_website'] : (isset($_GET['ubah']) && $_GET['ubah'] == "berhasil" ? $row_edit['nama_website'] : '')?>">
                     </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
                         <label for="URL_website">URL Website: </label>
                     </div>
@@ -111,7 +111,7 @@
                         <input class="form-control" type="text" name="URL_website" id="URL_website" placeholder="Masukkan Alamat website Anda!" value="<?php echo isset($_GET['tambah']) && $_GET['tambah'] == "berhasil" || isset($_GET['sidebar']) && isset($_GET['sidebar']) == "setting" ? $row_edit['URL_website'] : (isset($_GET['ubah']) && $_GET['ubah'] == "berhasil" ? $row_edit['URL_website'] : '') ?>" required>
                     </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
                         <label for="email">E-mail: </label>
                     </div>
@@ -119,7 +119,7 @@
                         <input class="form-control" type="email" name="email" id="email" placeholder="Masukkan E-mail Anda!" required value="<?php echo isset($_GET['tambah']) && $_GET['tambah'] == "berhasil" || isset($_GET['sidebar']) && isset($_GET['sidebar']) == "setting"  ? $row_edit['email'] : (isset($_GET['ubah']) && $_GET['ubah'] == "berhasil" ? $row_edit['email'] : '') ?>">
                     </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
                         <label for="telepon">Nomor Telepon: </label>
                     </div>
@@ -127,7 +127,7 @@
                         <input class="form-control" type="text" name="telepon" id="telepon" placeholder="Masukkan Nomor Telepon Anda!" required value="<?php echo isset($_GET['tambah']) && $_GET['tambah'] == "berhasil" || isset($_GET['sidebar']) && isset($_GET['sidebar']) == "setting" ? $row_edit['nomor_telepon'] : (isset($_GET['ubah']) && $_GET['ubah'] == "berhasil" || isset($_GET['sidebar']) ? $row_edit['nomor_telepon'] : '') ?>">
                     </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-sm-2">
                         <label for="alamat_kantor">Alamat Kantor: </label>
                     </div>
@@ -137,7 +137,7 @@
                         ? $row_edit['alamat_kantor'] : (isset($_GET['ubah']) && $_GET['ubah'] == "berhasil" || isset($_GET['sidebar']) ? $row_edit['nomor_telepon'] : '') ?></textarea>
                     </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                   <div class="col-sm-2">
                     <label for="logo">Logo: </label>
                   </div>
@@ -145,7 +145,7 @@
                     <input type="file" class="form-control" name="logo" id="logo" required>
                   </div>
                 </div>
-                <div class="row-mb-3">
+                <div class="row mb-3">
                     <div class="col-md-2 offset-md-2">
                         <button class="btn btn-primary" type="submit" name="simpan">Simpan!</button>
                         <button class="btn btn-info" type="reset" name="ulang">Ulang!</button>
@@ -182,6 +182,10 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-2.2.2/datatables.min.js" integrity="sha384-k90VzuFAoyBG5No1d5yn30abqlaxr9+LfAPp6pjrd7U3T77blpvmsS8GqS70xcnH" crossorigin="anonymous"></script>
+    <script>
+        let dataTable = new DataTable("#myTable");
+    </script>
 
 </body>
 

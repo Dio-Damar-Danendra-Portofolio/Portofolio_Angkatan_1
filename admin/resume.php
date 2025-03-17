@@ -2,8 +2,21 @@
     session_start();
     require_once "../koneksi.php";
 
-    $querycontact = mysqli_query($conn, "SELECT * FROM resume");
-    $rows = mysqli_fetch_all($querycontact, MYSQLI_ASSOC);
+    $query = mysqli_query($conn, "SELECT * FROM resume");
+    $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
+
+    if (isset($_GET['idDelete'])) {
+      $id = $_GET['idDelete'];
+
+      $queryResume = mysqli_query($conn, "SELECT * FROM resume");
+      $rowResume = mysqli_fetch_assoc($queryResume);
+      unlink('../assets/uploads/'. $rowResume['foto']);
+
+      $delete = mysqli_query($conn, "DELETE FROM resume WHERE id = $id");
+      if ($delete) {
+        header("Location: resume.php?hapus=berhasil");
+      }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,9 +40,16 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Resume</h5>
+              <?php 
+              if (isset($_GET['kirim']) && $_GET['kirim'] == "sukses") {?>
+                <div class="alert alert-success">
+                  Anda berhasil menambah/menyunting resume!
+                </div>
+              <?php }
+              ?>
               <div class="table table-responsive">
-                <a href="add_edit_resume.php" class="btn btn-primary mb-2">Create</a>
-                  <table class="table table-bordered text-center" id="myTable">
+                <a href="add_edit_resume.php" class="btn btn-primary mb-2">Tambah Resume</a>
+                  <table class="table table-striped table-bordered text-center" id="myTable">
                     <thead>
                       <tr>
                         <th>No. </th>
@@ -44,19 +64,19 @@
                     <tbody>
                     <?php 
                       $no = 1;
-                      foreach ($rows as $row) { ?>
+                      foreach ($row as $resume) { ?>
                       <tr>
                         <td><?php echo $no++ ?></td>
-                        <td><?php echo $row['tahun_awal'] ?></td>
-                        <td><?php echo $row['tahun_akhir'] ?></td>
-                        <td><?php echo $row['jabatan'] ?></td>
-                        <td><?php echo $row['instansi'] ?></td>
-                        <td><?php echo $row['deskripsi'] ?></td>
+                        <td><?php echo $resume['tahun_awal'] ?></td>
+                        <td><?php echo $resume['tahun_akhir'] ?></td>
+                        <td><?php echo $resume['jabatan'] ?></td>
+                        <td><?php echo $resume['instansi'] ?></td>
+                        <td><?php echo $resume['deskripsi'] ?></td>
                         <td>
-                          <a href="add_edit_resume.php?idEdit=<?php echo $row ['id'] ?>" class="btn btn-success btn-sm">Sunting</a>
-                          <a href="resume.php?idDelete=<?php echo $row['id'] ?>" 
+                          <a href="add_edit_resume.php?idEdit=<?php echo $resume ['id'] ?>" class="btn btn-success btn-sm">Sunting</a>
+                          <a href="resume.php?idDelete=<?php echo $resume['id'] ?>" 
                           class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin untuk menghapus data ini?')">Hapus</a>
-                          <a href="print-pdf.php?idPrint=<?php echo $row['id'] ?>" class="btn btn-primary btn-sm">Cetak PDF</a>
+                          <a href="print-pdf.php?idPrint=<?php echo $resume['id'] ?>" class="btn btn-primary btn-sm">Cetak PDF</a>
                         </td>
                       </tr> 
                     <?php } ?>
@@ -82,7 +102,7 @@
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
         crossorigin="anonymous"></script>
 <!-- Vendor JS Files -->
-<script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/vendor/chart.js/chart.umd.js"></script>
     <script src="../assets/vendor/echarts/echarts.min.js"></script>
