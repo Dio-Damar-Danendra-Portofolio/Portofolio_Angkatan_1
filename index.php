@@ -318,7 +318,7 @@
 						$tanggal = date("M d", strtotime($blog['created_at']));
 						$tahun = date("Y", strtotime($blog['created_at'])); 
 						$jam = date("H:i:s", strtotime($blog['created_at'])); 
-						echo $tanggal . " , " . $tahun?></span>
+						echo $tanggal . ", " . $tahun .", ". $jam ?></span>
 	                	<a href="#" class="mr-2"><?php echo $blog['penulis']?></a>
 	                	<a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a>
 	                </p>

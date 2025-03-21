@@ -43,38 +43,36 @@
     }
 
     if (isset($_POST['sunting'])) {
-      if (isset($_GET['idEdit'])) {
-        $id = $_GET['idEdit'];
-        $judul_blog = $_POST['judul'];
-        $kategori = $_POST['kategori'];
-        $isi = $_POST['isi'];
-        $status = $_POST['status'];
+      $id = $_GET['idEdit'];
+      $judul_blog = $_POST['judul'];
+      $id_kategori = $_POST['id_kategori'];
+      $isi = $_POST['isi'];
+      $penulis = $_SESSION['Full_Name'];
+      $status = $_POST['status'];
+      $tags = $_POST['tags'];
+      $foto = $_FILES['foto'];
 
-        $foto = $_FILES['foto'];
-        // var_dump($foto);
-  
-        if ($foto['error'] == 0) {
+      if (empty($_FILES['foto']['name'])) {
+        $queryUpdate = mysqli_query($conn, "UPDATE blog SET judul='$judul_blog', id_kategori='$id_kategori', isi='$isi', 
+        tags='$tags', status='$status', penulis='$penulis' WHERE id = $idEdit;");
+      } else {
           $namaFile = uniqid() . "_" .basename($foto['name']);
           $lokasiFile = "../assets/uploads/" . $namaFile;
-          // move_uploaded_file($logo['tmp_name'], $filePath);
           if (move_uploaded_file($foto['tmp_name'], $lokasiFile)){
             $qCheck = mysqli_query($conn, "SELECT foto FROM blog WHERE id = $idEdit;");
             $rowFoto = mysqli_fetch_assoc($qCheck);
             if ($rowFoto && file_exists("../assets/uploads/" . $rowFoto['foto'])) {
                 unlink("../assets/uploads/" . $rowFoto['foto']);
             }
-            $fillQUpdate = "foto='$namaFile', ";
-            $queryUpdate = mysqli_query($conn, "UPDATE blog SET $fillQUpdate judul='$judul_blog', kategori='$kategori', isi='$isi', 
-        isi='$isi', isi='$isi', $fillQUpdate 
-        WHERE id = $idEdit;");
           } else {
               echo "Gagal upload... Coba lagi...";
           }
-        }
-        
+        $fillQUpdate = "foto='$namaFile', ";
+        $queryUpdate = mysqli_query($conn, "UPDATE blog SET $fillQUpdate judul='$judul_blog', id_kategori='$id_kategori', isi='$isi', 
+        tags='$tags', status='$status', penulis='$penulis' WHERE id = $idEdit;");
+      }
         header("Location: blog.php?ubah=berhasil");
       }
-    }
 
     // if (isset($_GET['Edit']) && $_GET['Edit']) {
     //   $id = $_GET['Edit'];
@@ -121,7 +119,7 @@
                         <label class="form-label" for="isi" >Isi Berita: </label>
                     </div>
                     <div class="col-sm-10">
-                        <textarea class="form-control summernote" name="isi" id="isi" required></textarea>
+                        <textarea class="form-control summernote" name="isi" id="isi" required value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $rowEdit['isi'] : '' ?>"></textarea>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -129,7 +127,7 @@
                         <label class="form-label" for="kategori" >Kategori: </label>
                     </div>
                     <div class="col-sm-10">
-                        <select class="form-control" name="kategori" id="kategori" value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $rowEdit['kategori'] : '' ?>">
+                        <select class="form-control" name="id_kategori" id="kategori" value="<?= isset($_GET['idEdit']) || isset($_GET['sidebar']) ? $rowEdit['id_kategori'] : '' ?>">
                           <option value="Pilih Kategori">Pilih Kategori</option>
                           <?php foreach ($rowCategory as $category) {?>
                             <option value="<?php echo $category['id'] ?>"><?php echo $category['nama_kategori'] ?></option>
@@ -215,5 +213,4 @@
     });
   </script>
 </body>
-
 </html>
